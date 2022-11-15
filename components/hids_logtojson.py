@@ -18,6 +18,7 @@ def log2json(path):
         jsons.append(json_data)
     #     print(json_data)
     # print(jsons)
-
-    with open(path, "w") as f:
+    
+    path1 = path.split('.')[0]+'_1.json'
+    with open(path1, "w") as f:
         json.dump(jsons, f, indent = 4)

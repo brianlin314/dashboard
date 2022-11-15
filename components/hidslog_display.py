@@ -23,11 +23,12 @@ table_style = {
 def update(id):
     print(id)
     today = date.today()
-    todate = today.strftime("%m/%d/%y")
-    #在server上需要取消註解這行 ： hids_logtojson.log2json(globals.hidsdirpath+'/2022/Aug/ossec-alerts-09.json')
+    todate = today.strftime("%Y/%m/%d")
+    #在server上需要取消註解這行 ： 
+    hids_logtojson.log2json(globals.hidsdirpath+str(today.year)+'/'+today.strftime("%b")+'/ossec-alerts-'+str(today.day)+'.json')
     #讀取json檔, 篩選今天的log內容
     global df, df_
-    df = pd.read_json(open(globals.hidsdirpath+'/2022/Aug/ossec-alerts-09.json', "r", encoding="utf8"))
+    df = pd.read_json(open(globals.hidsdirpath+str(today.year)+'/'+today.strftime("%b")+'/ossec-alerts-'+str(today.day)+'_1.json', "r", encoding="utf8"))
     #在server上需要改 ： open(globals.hidsdirpath+'/'+today.year+'/'+today.strftime("%b")+'/ossec-alerts-'+today.day+'.json'
     df = df.loc[:, ["timestamp", "rule", "agent"]]
     df_=pd.DataFrame()
@@ -37,10 +38,10 @@ def update(id):
     df_['Agent'] = df['agent'].apply(lambda x: x['name'])
     df_['Event'] = df['rule'].apply(lambda x: x['description'])
     df_['Level'] = df['rule'].apply(lambda x: x['level'])
-
+    df_= df_.sort_values(by='Time',ascending=False)
     del df
     df = df_
-    df = df[((df['Date'] == '2022/08/09') & (df['Agent_ID'] == id))]
+    df = df[((df['Date'] == todate) & (df['Agent_ID'] == id))]
     all_cols = list(df.columns)
 
     table = dash_table.DataTable(
@@ -73,6 +74,32 @@ def update(id):
             'minWidth': '100%',
             'Width': '100%'
         },
+        style_data_conditional=[
+        {
+            'if': {
+                'filter_query': '{Level} >= 8',
+                'column_id': 'Level'
+            },
+            'backgroundColor': '#FD4000',
+            'color': 'white'
+        },
+        {
+            'if': {
+                'filter_query': '{Level} >4 && {Level} < 8',
+                'column_id': 'Level'
+            },
+            'backgroundColor': '#F7E277',
+            'color': 'white'
+        },
+        {
+            'if': {
+                'filter_query': '{Level} <=4',
+                'column_id': 'Level'
+            },
+            'backgroundColor': '#90BD3C',
+            'color': 'white'
+        },
+        ],
     )
 
     # # default_page_size = 100 # 每頁預設 data 數

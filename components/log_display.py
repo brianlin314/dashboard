@@ -30,6 +30,7 @@ def update(ip):
     df = df[((df['Date'] == today) & (df['Destination'] == ip))]
     df = df.loc[:, ["Date", "Time", "Signature Id", "Classification", "Priority", "Protocol", "Source", "Destination"]]
     df['Date'] = df['Date'].apply(lambda x: x.strftime("%Y/%m/%d"))
+    df= df.sort_values(by='Time',ascending=False)
     all_cols = list(df.columns)
     table = dash_table.DataTable(
         virtualization=True,

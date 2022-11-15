@@ -1,7 +1,7 @@
 import json
 def log2json(filename):
     f = open(filename, 'r')
-    jf = open('fast.json', 'w', newline='')
+    jf = open('/var/log/suricata/fast.json', 'w', newline='')
     lines = f.readlines()
     line_info = {}
     test=[]
@@ -36,4 +36,4 @@ def log2json(filename):
     jf.write(']')
     f.close()
     jf.close()
-log2json('fast.log')
+# log2json('fast.log')

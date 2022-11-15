@@ -89,7 +89,7 @@ def serve_layout():
 
 def update(value):
     if(value=='Raspberry Pi'):
-        ip = globals.agent_pi_ip
+        ip = globals.agent_pi_ip1
     elif(value=='PC'):
-        ip = globals.agent_pc_ip
+        ip = globals.agent_pc_ip1
     return ai_display.update(ip)
