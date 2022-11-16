@@ -25,10 +25,10 @@ def update(id):
     today = date.today()
     todate = today.strftime("%Y/%m/%d")
     #在server上需要取消註解這行 ： 
-    hids_logtojson.log2json(globals.hidsdirpath+str(today.year)+'/'+today.strftime("%b")+'/ossec-alerts-'+str(today.day)+'.json')
+    hids_logtojson.log2json(globals.hidsdirpath+str(today.year)+'/'+today.strftime("%b")+'/ossec-alerts-'+str(today.day).zfill(2)+'.json')
     #讀取json檔, 篩選今天的log內容
     global df, df_
-    df = pd.read_json(open(globals.hidsdirpath+str(today.year)+'/'+today.strftime("%b")+'/ossec-alerts-'+str(today.day)+'_1.json', "r", encoding="utf8"))
+    df = pd.read_json(open(globals.hidsdirpath+str(today.year)+'/'+today.strftime("%b")+'/ossec-alerts-'+str(today.day).zfill(2)+'_1.json', "r", encoding="utf8"))
     #在server上需要改 ： open(globals.hidsdirpath+'/'+today.year+'/'+today.strftime("%b")+'/ossec-alerts-'+today.day+'.json'
     df = df.loc[:, ["timestamp", "rule", "agent"]]
     df_=pd.DataFrame()
@@ -54,7 +54,7 @@ def update(id):
             'color': 'black',
             'fontWeight': 'bold',
             'textAlign': 'center',
-            'border':'1px black solid',
+            # 'border':'1px black solid',
         },
         style_data={
             'whiteSpace': 'normal',

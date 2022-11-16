@@ -27,14 +27,14 @@ def update(startDate, endDate, col_name, freqs, title, id):
             result = posts.count_documents({'$and':[{'timestamp':{"$gte":intervals[i-1]}},
                                                     {'timestamp':{"$lt":intervals[i]}},
                                                     {col_name:value},
-                                                    {'rule.id':{"$eq":id}}]})
+                                                    {'agent.id':{"$eq":id}}]})
             cnt[dic[value]].append(result)
 
     for value in set_values:
         result = posts.count_documents({'$and':[{'timestamp':{"$gt":intervals[-2]}},
                                                 {'timestamp':{"$lte":intervals[-1]}},
                                                 {col_name:value},
-                                                {'rule.id':{"$eq":id}}]})
+                                                {'agent.id':{"$eq":id}}]})
         cnt[dic[value]].append(result)
 
     # 去除資料個數為零的

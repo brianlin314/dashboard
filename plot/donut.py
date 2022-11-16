@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 
 from database import get_db
 
-def calculate_cnt(startDate, endDate, col_name):
+def calculate_cnt(startDate, endDate, col_name, id):
     # connect to database
     posts = get_db.connect_db()
 
@@ -14,7 +14,7 @@ def calculate_cnt(startDate, endDate, col_name):
         result = posts.count_documents({'$and':[{col_name:{"$in": [value]}},
                                                 {'timestamp':{"$gte":startDate}},
                                                 {'timestamp':{"$lte":endDate}},
-                                                {'rule.id':{"$eq":id}}]})
+                                                {'agent.id':{"$eq":id}}]})
         cnt.append(result)
     return cnt, set_values
 
@@ -25,8 +25,8 @@ def get_top_n(non_zero_cnt, non_zero_col, top_num):
         non_zero_col = non_zero_col[:top_num]
     return non_zero_cnt, non_zero_col
 
-def update(startDate, endDate, col_name, title, top_num):
-    cnt, set_values = calculate_cnt(startDate, endDate, col_name)
+def update(startDate, endDate, col_name, title, top_num, id):
+    cnt, set_values = calculate_cnt(startDate, endDate, col_name, id)
 
     # 去除資料個數為零的
     non_zero_cnt = []

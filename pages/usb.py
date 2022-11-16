@@ -1,46 +1,156 @@
 import dash_bootstrap_components as dbc
 from dash import dcc, html, callback
+import dash_bootstrap_components as dbc
+from dash import dcc, html, callback
+from dash.dependencies import Input, Output, State, ALL
+import feffery_antd_components as fac
+import pandas as pd
+from datetime import date
+from dash_extensions import Lottie
+import globals
+from components import usblog_display
+import dash
+# components
+img_path = './assets/img'
+hitNum = html.H1(
+    [
+        '載入資料中',
+        dbc.Spinner(size="lg", spinner_style={'margin-left': '15px', 'width': '40px', 'height': '40px'}),
+    ],
+    style={'textAlign': 'center'}, id='dataNum'
+)
+
+COL_STYLE = {
+   'width': 3,
+   'textAlign': 'center',
+}
+dropdown_style = {
+    "display":"inline-block",
+    "fontSize":20,
+    'width': '200px',
+    "position":"relative",
+    "left":"1rem",
+    "top":"1rem",
+    "bottom":"2rem"
+}
 
 STYLE = {
     "transition": "margin-left .5s",
     "margin-top": "2rem",
-    "margin-left": "20rem",
-    "margin-right": "1rem",
+    "margin-left": "15rem",
+    "margin-right": "0.5rem",
     "padding": "2rem 1rem",
     "background-color": "#f8f9fa",
-    'fontSize': 30,
     'zIndex':1,
-    'border':'1px black solid',
-}
-dropdown_style = {
-    "display":"inline-block",
-    "fontSize":30,
-    "width":'300px',
-    "height":"100px",
+    'height':1000,
+    # 'border':'1px black solid',
     "position":"relative",
-    "left":"1rem",
-    "top":"2rem"
+    "left":"0.5rem",
+    "top":"1rem"
+
 }
+table_style = {
+    "margin-right": "0.5rem",
+    'width':'100%',
+    'height':500,
+    'minWidth': '100%',
+    'minHeight': '100%',
+    "position":"relative",
+    "left":"4.75rem",
+    "top":"2rem",
+}
+
 
 def serve_layout():
     layout = html.Div(
         [
-            html.P("Welcome to usb"),
+            html.H4("Please Choose the Agent"),
             dbc.Row(
-                    dbc.Col(
-                        html.Div(children=[
-                        dcc.Dropdown(                       
-                            id="choice_agent",
-                            options=[
-                                {'label': 'Agent_A'},
-                                {'label': 'Respberry_pi'}
-                            ],
-                            placeholder="agent",
-                        )
-                        ],style=dropdown_style),
-                    )
+                dbc.Col(
+                    fac.AntdSelect(
+                        id = 'uagentselect',
+                        placeholder='Agent:',
+                        options=[
+                            {'label': 'Raspberry Pi', 'value': 'Raspberry Pi'},
+                            {'label': 'PC', 'value': 'PC'},
+                        ],
+                        style=dropdown_style
+                    ),
+                ),
+            ),
+            dcc.Loading(
+                [
+                    dbc.Row(
+                        [
+                            dbc.Col(
+                                dbc.Card(
+                                    [
+                                        dbc.CardHeader(html.Img(src=f'{img_path}/check.png', height="50px")),
+                                        dbc.CardBody(
+                                            [
+                                                html.H4('Authorized Using USB'),
+                                                html.H4('--', style={'fontSize':30, 'color':'blue'}, id='AUSB'),
+                                            ],
+                                        ),
+                                    ],
+                                ),
+                                style=COL_STYLE,
+                            ),
+                            dbc.Col(
+                                dbc.Card(
+                                    [
+                                        dbc.CardHeader(html.Img(src=f'{img_path}/warning.png', height="50px")),
+                                        dbc.CardBody(
+                                            [
+                                                html.H4('Unauthorized Using USB'),
+                                                html.H4('--', style={'fontSize':30, 'color':'blue'}, id='UUSB'),
+                                            ],
+                                        ),
+                                    ],
+                                ),
+                                style=COL_STYLE,
+                            ),
+                            dbc.Col(
+                                dbc.Card(
+                                    [
+                                        dbc.CardHeader(html.Img(src=f'{img_path}/usb-port.png', height="50px")),
+                                        dbc.CardBody(
+                                            [
+                                                html.H4('Total Using Port'),
+                                                html.H4('--', style={'fontSize':30, 'color':'blue'}, id='Total'),
+                                            ],
+                                        ),
+                                    ],
+                                ),
+                                style=COL_STYLE,
+                            ),
+                        ],
+                        style={'margin-top':30,'margin-left':'3rem','margin-right':'3rem'},
+                    ),
+                    dbc.Row(
+                        html.Div(
+                            id='utable'
+                        ),style = table_style,
+                    ),
+                ],
             ),
         ],
         style=STYLE,
     )
     return layout
+
+@callback(
+    Output('AUSB', 'children'),
+    Output('UUSB', 'children'),
+    Output('Total', 'children'),
+    Output('utable', 'children'),
+    Input('uagentselect', 'value'),
+    prevent_initial_call=True
+)
+
+def update(value):
+    if(value=='Raspberry Pi'):
+        return usblog_display.update(globals.agent_pi_id)
+    elif(value=='PC'):
+        return usblog_display.update(globals.agent_pc_id)
+    return dash.no_update, dash.no_update, dash.no_update, dash.no_update

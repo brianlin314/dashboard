@@ -21,7 +21,7 @@ table_style = {
 
 def update(ip):
     today = date.today()
-    today = today.strftime("%m/%d/%y")
+    today = today.strftime("%m/%d/%Y")
     nids_logtojson.log2json(globals.nidsdirpath+"/fast.log")
 
     #讀取json檔, 篩選今天的log內容

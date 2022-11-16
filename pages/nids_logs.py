@@ -7,6 +7,7 @@ import feffery_antd_components as fac
 import pandas as pd
 from datetime import date
 import globals
+import dash
 from components import log_display, nids_logtojson
 # components
 hitNum = html.H1(
@@ -88,7 +89,7 @@ def serve_layout():
 
 def update(value):
     if(value=='Raspberry Pi'):
-        ip = globals.agent_pi_ip
+        return log_display.update(globals.agent_pi_ip)
     elif(value=='PC'):
-        ip = globals.agent_pc_ip
-    return log_display.update(ip)
+        return log_display.update(globals.agent_pc_ip)
+    return dash.no_update

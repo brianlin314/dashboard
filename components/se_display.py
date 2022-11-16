@@ -98,21 +98,21 @@ def update(startDate, endDate, freqs, id):
     posts = get_db.connect_db()
     total = posts.count_documents({'$and':[{'timestamp': {"$gte":startDate}},
                                            {'timestamp': {"$lte":endDate}},
-                                           {'rule.id':{"$eq":id}}]})
+                                           {'agent.id':{"$eq":id}}]})
 
     level12 = posts.count_documents({'$and':[{'timestamp': {"$gte":startDate}},
                                              {'timestamp': {"$lte":endDate}},
-                                             {'rule.id':{"$eq":id}},
+                                             {'agent.id':{"$eq":id}},
                                              {'rule.level': {"$gte":12}}]})
 
     fail = posts.count_documents({'$and':[{'timestamp': {"$gte":startDate}},
                                           {'timestamp': {"$lte":endDate}},
-                                          {'rule.id':{"$eq":id}},
+                                          {'agent.id':{"$eq":id}},
                                           {'rule.groups': 'authentication_failed'}]})
 
     success = posts.count_documents({'$and':[{'timestamp': {"$gte":startDate}},
                                              {'timestamp': {"$lte":endDate}},
-                                             {'rule.id':{"$eq":id}},
+                                             {'agent.id':{"$eq":id}},
                                              {'rule.groups': 'authentication_success'}]})
 
     return [f'從 {startDate} 到 {endDate}', total, level12, fail, success, first_row, second_row]
