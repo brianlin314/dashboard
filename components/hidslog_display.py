@@ -101,11 +101,4 @@ def update(id):
         },
         ],
     )
-
-    # # default_page_size = 100 # 每頁預設 data 數
-    # display = [
-    #     html.Br(),
-    #     table,
-    # ],style = table_style
-
     return table

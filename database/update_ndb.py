@@ -2,7 +2,7 @@
 # import pickle as pkl
 # from datetime import datetime, timedelta
 
-# from database import create_suricatadb
+# from database import create_ndb
 
 # # generator
 # def gen_dates(start, days):
@@ -24,33 +24,17 @@
 #     return year, month, day
 
 # def update_db(posts, dir_path, sudoPassword):
-#     create_suricatadb.change_permission(dir_path, sudoPassword)
-#     create_suricatadb.unzip(dir_path, sudoPassword)
+#     create_ndb.change_permission(dir_path, sudoPassword)
+#     create_ndb.unzip(dir_path, sudoPassword)
 
 #     file = open('last_date.pkl', 'rb')
 #     last_time, last_cnt = pkl.load(file)
 #     # print(last_time, last_cnt)
 
-#     dateFormat = '%Y-%m-%d'
-#     now = datetime.now().date()
-#     now_time = datetime.strftime(now, dateFormat)
-
-#     months = [
-#         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-#         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-#     ]
-
-#     convert_month = {}
-#     for i in range(len(months)):
-#         convert_month[str(i+1).zfill(2)] = months[i]
-#     last_time =  last_time.split('/')[-1]
-#     dates_lst = get_date_list(last_time, now_time)
-
 #     # 特殊處理上次更新的最後一天
 #     data = []
-#     last_y, last_m, last_d = get_time_info(dates_lst[0])
 #     #f = open(f'{dir_path}/{last_y}/{convert_month[last_m]}/ossec-alerts-{last_d}.json', 'r') #suricata路徑
-#     f = open(f'/dashboard/fast.json', 'r')
+#     f = open(f'{dir_path}/eve.json', 'r')
 #     lines = f.readlines()
 #     update_lines = lines[last_cnt:]
 #     try:
@@ -62,25 +46,7 @@
 
 #     # 更新 last date info
 #     last_date_info = [last_time, len(lines)]
-#     create_suricatadb.record_last(last_date_info)
-
-#     # 更新其他天的資料
-#     for date in dates_lst[1:]:
-#         year, month, day = get_time_info(date)
-#         try:
-#             #f = open(f'{dir_path}/{year}/{convert_month[month]}/ossec-alerts-{day}.json', 'r')
-#             f = open(f'/dashboard/fast.json', 'r')
-#             lines = f.readlines()
-
-#             # 更新 last date info
-#             last_date_info = [f'{year}-{month}-{day}', len(lines)]
-#             create_suricatadb.record_last(last_date_info)
-
-#             json_lines = [json.loads(line) for line in lines]
-#             data += json_lines
-#         except:
-#             pass
-#             # print(f'{date} 沒有資料')
+#     create_ndb.record_last(last_date_info)
 
 #     # print('-' * 25)
 #     num = 0

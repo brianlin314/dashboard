@@ -11,7 +11,7 @@ from flask import send_from_directory
 
 import globals
 from components import navbar, menubar, hide_sidebar
-from pages import home, discover, security_events, non_exist, hids_logs, nids_logs, AI_prediction, usb, add_agents, add_usb
+from pages import home, discover, security_events, non_exist, hids_logs, nids_logs, AI_prediction, usb, add_agents, add_usb, history, statistics
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
 
@@ -65,6 +65,12 @@ def display_page(pathname):
     elif pathname == '/Host_based/logs':
         layout = hids_logs.serve_layout()
         return layout 
+    elif pathname == '/Network_based/History':
+        layout = history.serve_layout()
+        return layout
+    elif pathname == '/Network_based/Statistics':
+        layout = statistics.serve_layout()
+        return layout
     elif pathname == '/Network_based/logs':
         layout = nids_logs.serve_layout()
         return layout
@@ -74,9 +80,9 @@ def display_page(pathname):
     elif pathname == '/USB':
         layout = usb.serve_layout()
         return layout
-    elif pathname == '/Setting/add_agents':
-        layout = add_agents.serve_layout()
-        return layout
+    # elif pathname == '/Setting/add_agents':
+    #     layout = add_agents.serve_layout()
+    #     return layout
     elif pathname == '/Setting/add_USB':
         layout = add_usb.serve_layout()
         return layout

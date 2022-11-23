@@ -22,6 +22,8 @@ def update(id):
     global df
     df = pd.read_json("/home/server/dash_brain/usb_data/usb_info.json")
     id = int(id)
+    print(id)
+    print(df)
     df = df[(df["agent_id"] == id)]
     try:
         df['In_Time'] = df['In_Time'].apply(lambda x: x.strftime("%H:%M:%S"))
