@@ -1,17 +1,18 @@
 from dash import html
 import dash_bootstrap_components as dbc
 
-img_path = './assets/img'
-logo = f'{img_path}/logo.png'
-github=f'{img_path}/github1.png'
+# 定義導航欄
+img_path = '../assets/img' # ../ 代表上一層目錄
+logo = f'{img_path}/logo.png' # 成功大學圖樣
+github = f'{img_path}/github1.png'
 
-navbar = dbc.Navbar(
+navbar = dbc.Navbar( 
     [
-        html.A(
+        html.A( # A為連結功用
             # 利用 row, col 來控制排版
             dbc.Row(
                 [
-                    dbc.Col(html.Img(src=logo, height="50px")), #style={'background-color':'white'}
+                    dbc.Col(html.Img(src = logo, height = "50px")), 
                 ],
             ),
             href="https://www.ncku.edu.tw/",

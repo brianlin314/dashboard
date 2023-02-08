@@ -2,7 +2,9 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html, callback
 import feffery_antd_components as fac  
 from dash.dependencies import Input, Output, State
+
 import ast
+from usb_data import cdbtxt2json
 
 STYLE = {
     "transition": "margin-left .5s",
@@ -14,6 +16,7 @@ STYLE = {
     'fontSize': 30,
     'zIndex':1,
 }
+
 dropdown_style = {
     "display":"inline-block",
     "fontSize":30,
@@ -27,7 +30,7 @@ dropdown_style = {
 def serve_layout():
     layout = html.Div(
         [
-            html.P("Welcome to add usb"),
+            html.P("Welcome to add Authorized USB"),
             html.Div(
                 [   
                     fac.AntdRow(
@@ -37,7 +40,7 @@ def serve_layout():
                                 style={
                                     'width': '170px',
                                     "font-size": '24px',
-                                    'color':'#1087FA',
+                                    'color':'#0E79E1',
                                 }
                             ),
                             fac.AntdInput(
@@ -61,7 +64,7 @@ def serve_layout():
                                 style={
                                     'width': '170px',
                                     "font-size": '24px',
-                                    'color':'#1087FA',
+                                    'color':'#0E79E1',
                                 }
                             ),
                             fac.AntdInput(
@@ -85,7 +88,7 @@ def serve_layout():
                                 style={
                                     'width': '170px',
                                     "font-size": '24px',
-                                    'color':'#1087FA',
+                                    'color':'#0E79E1',
                                 }
                             ),
 
@@ -94,7 +97,6 @@ def serve_layout():
                                 mode='password', #隱藏所打的字
                                 size='large', #調整輸入框大小
                                 placeholder='輸入USB Serial Number', #輸入框裡的文字
-                                #addonAfter='輸入USB Serial Number', #輸入框前的文字
                                 style={ #css style
                                     'width': '300px',
                                     'marginBottom': '5px'
@@ -110,7 +112,7 @@ def serve_layout():
                                 style={
                                     'width': '170px',
                                     "font-size": '24px',
-                                    'color':'#1087FA',
+                                    'color':'#0E79E1',
                                 }
                             ),
 
@@ -119,7 +121,6 @@ def serve_layout():
                                 mode='password', #隱藏所打的字
                                 size='large', #調整輸入框大小
                                 placeholder='再次確認USB Serial Number', #輸入框裡的文字
-                                #addonBefore='輸入USB Serial Number', #輸入框前的文字
                                 style={ #css style
                                     'width': '300px',
                                     'marginBottom': '5px'
@@ -136,7 +137,7 @@ def serve_layout():
                                 style={
                                     'width': '170px',
                                     "font-size": '24px',
-                                    'color':'#1087FA',
+                                    'color':'#0E79E1',
                                 }
                             ),
                             fac.AntdSelect(
@@ -144,10 +145,10 @@ def serve_layout():
                                 placeholder='請選擇Agent',
                                 size='large',
                                 options=[
-                                    {'label':'PC','value':'000'},
-                                    {'label':'Raspberry pi','value':'001'},
-                                    {'label':'Laptop','value':'002','disabled': True},
-                                    {'label':'CNC','value':'003','disabled': True}
+                                    {'label':'PC','value':'004'},
+                                    {'label':'Raspberry pi','value':'003'},
+                                    {'label':'Laptop','value':'009','disabled': True},
+                                    {'label':'CNC','value':'008','disabled': True}
                                 ],
                                 style={
                                 'width': '200px' #固定寬度
@@ -191,16 +192,13 @@ def serve_layout():
     State('usb-select','value'),
     State('input-usbSN','value'),
     State('input-usbSN-again','value')],
-    prevent_initial_call=True #防止每次都讀到None
+    prevent_initial_call=True # 防止每次都讀到None
 )
 
-def callback_usb(input_button_clicks, account, password, clickedKey, input_value, input_value_again): #第一個參數是Input的參數，第二個是State的參數
-    print(input_value)
-    print(clickedKey)
+def callback_usb(input_button_clicks, account, password, clickedKey, input_value, input_value_again): #第一個參數是Input的參數，第二個是State的參數,參數必須照順序填入
     check=0
     auth=open('./usb_data/manager.json','r')
     lines=auth.readlines()
-    print(len(lines))
     for line in lines:
         line = ast.literal_eval(line)
         if line['manager'] == account:
@@ -211,6 +209,7 @@ def callback_usb(input_button_clicks, account, password, clickedKey, input_value
                         f.write(cdb_list)
                         f.write('\n')
                     f.close()
+                    cdbtxt2json.c2j()
                     return [
                         f'USB Serial Number = {input_value}',
                         f'Agent = {clickedKey}',

@@ -121,7 +121,7 @@ def update(n_clicks, value, time): #,dagentselect
     # 將 time 轉成 timestamp format, 並得到 interval
     startDate, endDate, freqs = process_time.get_time_info(time)
     if(value=='Raspberry Pi'):
-        return history_display.update(startDate, endDate, freqs, globals.agent_pi_id)
+        return history_display.update(startDate, endDate, freqs, globals.agent_pi_ip)
     elif(value=='PC'):
-        return history_display.update(startDate, endDate, freqs, globals.agent_pc_id)
+        return history_display.update(startDate, endDate, freqs, globals.agent_pc_ip)
     return dash.no_update, dash.no_update

@@ -33,6 +33,7 @@ def log2json(filename):
         json.dump(line_info, jf)
         if checking != check:
             jf.write(',')
+            jf.write('\n')
     jf.write(']')
     f.close()
     jf.close()

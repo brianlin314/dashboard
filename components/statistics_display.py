@@ -35,7 +35,7 @@ FIRST_STYLE = {
     "background-color": "#f8f9fa",
     'fontSize': 10,
     'zIndex':1,
-    'width': '800px',
+    'width': '40%',
     'zIndex':1,
 }
 

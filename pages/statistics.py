@@ -6,7 +6,7 @@ import feffery_antd_components as fac
 from process_time import process_time
 from components import datePicker, statistics_display
 import globals
-img_path = './assets/img'
+img_path = '../assets/img'
 # # options = dict(loop=True, autoplay=True, rendererSettings=dict(preserveAspectRatio='xMidYMid slice'))
 dropdown_style = {
     "display":"inline-block",

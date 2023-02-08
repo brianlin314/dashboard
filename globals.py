@@ -3,15 +3,15 @@ from database import get_db, get_ndb
 from datetime import date
 
 def initialize():
-    global posts, num, first, agent_pi_ip1, agent_pc_ip1, current_db, selected_fields, hposts, hnum, current_hdb, n_selected_fields, add_next_click, all_fields, fields_num, hadd_next_click, all_hfields, hfields_num, agent_pi_ip , agent_pc_ip, hidsdirpath, nidsdirpath, agent_pi_id , agent_pc_id, pcapdirpath, csvdirpath, modelpath
+    global posts, num, sudoPassword, first, agent_pi_ip1, agent_pc_ip1, current_db, selected_fields, hposts, hnum, current_hdb, n_selected_fields, add_next_click, all_fields, fields_num, hadd_next_click, all_hfields, hfields_num, agent_pi_ip , agent_pc_ip, hidsdirpath, nidsdirpath, agent_pi_id , agent_pc_id, pcapdirpath, csvdirpath, modelpath
     # 需要 sudo 密碼以存取檔案
     today = date.today()
-    agent_pc_id = "000"
-    agent_pi_id = "001"
-    agent_pi_ip = "192.168.65.77:0"
-    agent_pi_ip1 = "192.168.65.77"
-    agent_pc_ip = '192.168.65.65:8'
-    agent_pc_ip1 = '192.168.65.65'
+    agent_pc_id = "004"
+    agent_pi_id = "003"
+    agent_pi_ip = "192.168.3.66:80"
+    agent_pi_ip1 = "192.168.3.66"
+    agent_pc_ip = '192.168.3.7:80'
+    agent_pc_ip1 = '192.168.3.7'
     sudoPassword = '0314' # 0
     dir_path = '/var/ossec/logs/alerts'
     hidsdirpath = '/var/ossec/logs/alerts/' #('放你的wazuhlog存放路徑 不包含年月日'+'/'+today.year+'/'+today.strftime("%b")+'/ossec-alerts-'+today.day+'.json')

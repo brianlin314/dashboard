@@ -1,11 +1,13 @@
-import dash_bootstrap_components as dbc
+import dash_bootstrap_components as dbc # 引入外部套件
+import dash
+import feffery_antd_components as fac
 from dash import dcc, html, callback
 from dash.dependencies import Input, Output, State, ALL
-import feffery_antd_components as fac
 from process_time import process_time
-import dash
-import globals
+
+import globals # 引用內部函式
 from components import fields, datePicker, discover_display, collapse_item, alert
+
 dropdown_style = {
     "display":"inline-block",
     "fontSize":20,
@@ -16,7 +18,7 @@ dropdown_style = {
     "bottom":"2rem"
 }
 # components
-hitNum = html.H1(
+hitNum = html.H1( # 載入完即消失
     [
         '載入資料中',
         dbc.Spinner(size="lg", spinner_style={'margin-left': '15px', 'width': '40px', 'height': '40px'}),
@@ -31,32 +33,32 @@ DISPLAY_STYLE = {
     "padding": "1rem 1rem",
     "background-color": "#f8f9fa",
     'fontSize': 12,
-    # 'border':'1px black solid',
     'width': '1px',
     'zIndex':1,
 }
 
 def serve_layout(first):
-    first, notification = alert.update_notification(first)
+    first, notification = alert.update_notification(first) # 會跳出更新幾筆資料
 
     layout = html.Div(
         [
             dbc.Row(
                 [
-                    fields.serve_fields(),
+                    fields.serve_fields(), # 左側選取field欄位
 
                     dbc.Col(
                         [
                             dbc.Row(
                                 [
-                                    datePicker.discover_date_picker(),   # live update
-                                    notification #,style={'margin-right':'3rem'}
+                                    datePicker.discover_date_picker(),   # live update, 調整時間
+                                    notification
                                 ],
                             ),
-                            fac.AntdSelect(
+
+                            fac.AntdSelect( # 下拉式選取監控端點
                                 id = 'dagentselect',
-                                placeholder='Agent:',
-                                options=[
+                                placeholder = 'Agent:',
+                                options = [
                                     {'label': 'Raspberry Pi', 'value': 'Raspberry Pi'},
                                     {'label': 'PC', 'value': 'PC'},
                                 ],
@@ -67,7 +69,7 @@ def serve_layout(first):
                                 html.Div(
                                     [
                                         hitNum,
-                                        dbc.Col(id='graph-and-table'),
+                                        dbc.Col(id = 'graph-and-table'),
                                     ],
                                 ),
                             ),
@@ -88,20 +90,20 @@ def serve_layout(first):
         Output("graph-and-table", "children"),
     ],
     [
-        Input('submit_date', 'n_clicks'),
-        Input({'type': 'add_btn', 'index': ALL}, 'n_clicks'),
-        Input({'type': 'del_btn', 'index': ALL}, 'n_clicks'),
+        Input('submit_date', 'n_clicks'), # update按鈕
+        Input({'type': 'add_btn', 'index': ALL}, 'n_clicks'), # selected field 新增或刪除，選擇後會立刻更改
+        Input({'type': 'del_btn', 'index': ALL}, 'n_clicks'),  # selected field 新增或刪除，選擇後會立刻更改
         Input('dagentselect', 'value'),
     ],
     [
-        State('datetime-picker', 'value'),
+        State('datetime-picker', 'value'), # 時間算在state，當input value出去後會跟著改變
     ]
 )
-def update(n_clicks, add_btn, del_btns, value, time): #,dagentselect
+def update(n_clicks, add_btn, del_btns, value, time): # dagentselect, 參數必須照input順序填入
     # 將 time 轉成 timestamp format, 並得到 interval
     startDate, endDate, freqs = process_time.get_time_info(time)
-    if(value=='Raspberry Pi'):
+    if(value == 'Raspberry Pi'):
         return discover_display.update(startDate, endDate, freqs, globals.agent_pi_id)
-    elif(value=='PC'):
+    elif(value == 'PC'):
         return discover_display.update(startDate, endDate, freqs, globals.agent_pc_id)
-    return dash.no_update, dash.no_update, dash.no_update
+    return dash.no_update, dash.no_update, dash.no_update # 若還沒選擇監控端點，是不會顯示任何值
